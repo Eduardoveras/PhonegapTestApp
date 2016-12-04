@@ -56,13 +56,22 @@ $(document).ready(function() {
        $('.greeting-id').append(data.id);
        $('.greeting-content').append(data.content);
     });
+
+
+    $.ajax({
+      url: '/js/arrays.json',
+      type: 'get',
+      dataType: 'json',
+      error: function(data){
+        console.log(data)
+        console.log("ERROR EN AJAX")
+      },
+      success: function(data){
+        console.log(data)
+         $('#example').append(data);
+         $('#title').innerHTML=data.toString();
+      }
+    });
+
 });
-
-
-
-$(document).ready(function() {
-    $('#example').DataTable( {
-        "ajax": '/data/arrays.txt'
-    } );
-} );
 
