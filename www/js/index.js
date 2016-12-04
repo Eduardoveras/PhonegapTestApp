@@ -57,3 +57,12 @@ $(document).ready(function() {
        $('.greeting-content').append(data.content);
     });
 });
+
+
+
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "ajax": '/data/arrays.txt'
+    } );
+} );
+
