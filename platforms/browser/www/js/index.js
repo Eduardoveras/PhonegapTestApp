@@ -66,11 +66,34 @@ $(document).ready(function() {
         console.log(data)
         console.log("ERROR EN AJAX")
       },
-      success: function(data){
-        console.log(data)
-         $('#example').append(data);
-         $('#title').innerHTML=data.toString();
-      }
+      success: function(response){
+
+          var len = response.data.length;
+          var data = response.data;
+          var txt = "";
+          if(len > 0) {
+              for (var i = 0; i < len; i++) {
+                  txt += "<tr>"
+
+                  for(var j = 0 ; j < 6 ;j++)
+                  {
+                      txt += "<td>" + data[i][j]+ "</td>";
+                  }
+                  txt += "</tr>"
+              }
+              if (txt != "") {
+                  $("#exampleTable").append(txt).removeClass("hidden");
+              }
+          }
+         //$('#title').innerHTML=data.toString();
+
+
+      },
+        error: function(request, status, error) {
+            console.log("Error status " + status);
+            console.log("Error request status text: " + request.statusText);
+            console.log("Error request status: " + request.status);
+        }
     });
 
 });
