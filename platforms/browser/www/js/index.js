@@ -49,6 +49,26 @@ var app = {
 };
 
 
+function createRequest() {
+    var result = null;
+    if (window.XMLHttpRequest) {
+        // FireFox, Safari, etc.
+        result = new XMLHttpRequest();
+        if (typeof xmlhttp.overrideMimeType != 'undefined') {
+            result.overrideMimeType('text/xml'); // Or anything else
+        }
+    }
+    else if (window.ActiveXObject) {
+        // MSIE
+        result = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else {
+        // No known mechanism -- consider aborting the application
+    }
+    return result;
+}
+
+
 $(document).ready(function() {
 
     $(document).ready(function() {
@@ -60,68 +80,32 @@ $(document).ready(function() {
 
             if($.trim(email).length>0 & $.trim(password).length>0)
             {
+                $("#incompleto").fadeOut();
 
-                /*
+                $.get( url, function( response ) {
 
-                var req = createRequest(); // defined above
-                // Create the callback:
-                req.onreadystatechange = function() {
-                    if (req.readyState != 4) return; // Not there yet
-                    if (req.status != 200) {
-                        // Handle request failure here...
-                        return;
+                    console.log(response);
+
+                    if(response === true)
+                    {
+                        $("#incorrecto").fadeOut();
+                        window.localStorage.setItem("email", email);
+                        window.location = "home.html";
                     }
-                    // Request successful, read the response
-                    var resp = req.responseText;
+                    else
+                        $("#incorrecto").fadeIn();
+                } );
 
 
-                    req.open("GET",url , true);
-                    req.send();
-                }*/
-                $.ajax({
-                    url:url
-                }).then(function(data) {
-                    console.log(data);
-                });
+            }
+            else
+            {
+                $("#incompleto").fadeIn();
             }
 
         });
 
     });
 
-
-    $.ajax({
-        url: '/js/arrays.json',
-        type: 'get',
-        dataType: 'json',
-        success: function(response){
-            console.log(response);
-
-            var len = response.data.length;
-            var data = response.data;
-            var txt = "";
-            if(len > 0) {
-                for (var i = 0; i < len; i++) {
-                    txt += "<tr>"
-
-                    for(var j = 0 ; j < 6 ;j++)
-                    {
-                        txt += "<td>" + data[i][j]+ "</td>";
-                    }
-                    txt += "</tr>"
-                }
-                if (txt != "") {
-                    $("#exampleTable").append(txt);
-                }
-            }
-            //$('#title').innerHTML=data.toString();
-
-
-        },
-        error: function(request, status, error) {
-            alert("Error");
-            console.log("Error status " + status);
-        }
-    });
 
 });
