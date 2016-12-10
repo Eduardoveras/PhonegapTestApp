@@ -50,28 +50,78 @@ var app = {
 
 
 $(document).ready(function() {
-    $.ajax({
-        url: "http://rest-service.guides.spring.io/greeting"
-    }).then(function(data) {
-       $('.greeting-id').append(data.id);
-       $('.greeting-content').append(data.content);
+
+    $(document).ready(function() {
+        $("#login").click(function(){
+
+            var email=$("#email").val();
+            var password=$("#password").val();//ev@gmail.com
+            var url = "http://amazon-platano.herokuapp.com/rest/login?email=" + email + "&password=" + password;
+
+            if($.trim(email).length>0 & $.trim(password).length>0)
+            {
+
+                /*
+
+                var req = createRequest(); // defined above
+                // Create the callback:
+                req.onreadystatechange = function() {
+                    if (req.readyState != 4) return; // Not there yet
+                    if (req.status != 200) {
+                        // Handle request failure here...
+                        return;
+                    }
+                    // Request successful, read the response
+                    var resp = req.responseText;
+
+
+                    req.open("GET",url , true);
+                    req.send();
+                }*/
+                $.ajax({
+                    url:url
+                }).then(function(data) {
+                    console.log(data);
+                });
+            }
+
+        });
+
     });
 
 
     $.ajax({
-      url: '/js/arrays.json',
-      type: 'get',
-      dataType: 'json',
-      error: function(data){
-        console.log(data)
-        console.log("ERROR EN AJAX")
-      },
-      success: function(data){
-        console.log(data)
-         $('#example').append(data);
-         $('#title').innerHTML=data.toString();
-      }
+        url: '/js/arrays.json',
+        type: 'get',
+        dataType: 'json',
+        success: function(response){
+            console.log(response);
+
+            var len = response.data.length;
+            var data = response.data;
+            var txt = "";
+            if(len > 0) {
+                for (var i = 0; i < len; i++) {
+                    txt += "<tr>"
+
+                    for(var j = 0 ; j < 6 ;j++)
+                    {
+                        txt += "<td>" + data[i][j]+ "</td>";
+                    }
+                    txt += "</tr>"
+                }
+                if (txt != "") {
+                    $("#exampleTable").append(txt);
+                }
+            }
+            //$('#title').innerHTML=data.toString();
+
+
+        },
+        error: function(request, status, error) {
+            alert("Error");
+            console.log("Error status " + status);
+        }
     });
 
 });
-
